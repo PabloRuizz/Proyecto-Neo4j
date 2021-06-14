@@ -37,6 +37,7 @@ public class Consulta01 extends javax.swing.JDialog {
              modelo.addElement(Neo4.limpiar(dato.get(0).toString()));
             
         }
+        
          
         Object []titulos={"Producto","Precio","Stock"};
         Object [][]filas=null;       

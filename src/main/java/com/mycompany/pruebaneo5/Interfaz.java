@@ -5,30 +5,53 @@
  */
 package com.mycompany.pruebaneo5;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import org.neo4j.driver.Record;
 
 /**
  *
  * @author PABLO
  */
+
 public class Interfaz extends javax.swing.JFrame {
 
     /**
      * Creates new form NewJFrame
      */
     private Neo4 miNeo;
+    HashMap<String,String> roles=new HashMap<String,String>();
     public Interfaz() {
         initComponents();
       //cargarBase("src/base.txt");
-     
+      jMenuBar1.setEnabled(false);
+      jMenuBar1.setVisible(false);
+      botonSesion.setVisible(false);
+      jPanel2.setVisible(true);
          miNeo = new Neo4( "bolt://localhost:7687", "neo4j", "123" );
+         
+         //cargar role
+         List<Record> datos=miNeo.obtenerRoles();
+         DefaultComboBoxModel modeloRol=new DefaultComboBoxModel();
+         comboRol.setModel(modeloRol);
+          for (Record dato : datos) {
+             modeloRol.addElement(Neo4.limpiar(dato.get(0).toString()));
+             roles.put(Neo4.limpiar(dato.get(0).toString()), Neo4.limpiar(dato.get(1).toString()));
+            
+        }
             
     }
 
@@ -42,6 +65,13 @@ public class Interfaz extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        comboRol = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jPasswordField1 = new javax.swing.JPasswordField();
+        botonSesion = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -59,6 +89,7 @@ public class Interfaz extends javax.swing.JFrame {
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenuItem16 = new javax.swing.JMenuItem();
+        jMenuItem17 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem12 = new javax.swing.JMenuItem();
         jMenuItem13 = new javax.swing.JMenuItem();
@@ -66,15 +97,97 @@ public class Interfaz extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        comboRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboRol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboRolActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Acceso");
+
+        jLabel2.setText("Contraseña");
+
+        jButton1.setText("Entrar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jPasswordField1.setText("jPasswordField1");
+        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordField1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(jLabel1)
+                        .addGap(22, 22, 22))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel2)))
+                .addGap(34, 34, 34)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(comboRol, 0, 91, Short.MAX_VALUE)
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(81, 81, 81))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(58, 58, 58)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(comboRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+
+        botonSesion.setText("Cerrar sesion");
+        botonSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonSesionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(258, 258, 258)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(315, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(botonSesion)
+                .addGap(19, 19, 19))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 579, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(botonSesion)
+                .addGap(54, 54, 54)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(321, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Insertar");
@@ -195,6 +308,14 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
         jMenu3.add(jMenuItem16);
+
+        jMenuItem17.setText("Ver grafo productos");
+        jMenuItem17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem17ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem17);
 
         jMenuBar1.add(jMenu3);
 
@@ -356,6 +477,76 @@ public class Interfaz extends javax.swing.JFrame {
         abrirNavegador("http://localhost:7474/browser/");
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+        String tipoUsuario=comboRol.getSelectedItem().toString();
+        String passEscrita=String.valueOf(jPasswordField1.getPassword());
+       /* System.out.println("Escrito "+passEscrita);
+        System.out.println("ES :"+roles.get(tipoUsuario));*/
+        if(roles.get(tipoUsuario).equalsIgnoreCase(passEscrita)){
+            jMenuBar1.setEnabled(true);
+            jMenuBar1.setVisible(true);
+            botonSesion.setVisible(true);
+            jPanel2.setVisible(false);
+            
+            switch(tipoUsuario){
+                case "admin":
+                     jMenu1.setVisible(true);
+                     jMenu2.setVisible(true);
+                      jMenu3.setVisible(true);
+                       jMenu4.setVisible(true);
+                    
+                    break;
+                case "invitado":
+                    jMenu1.setVisible(false);
+                     jMenu2.setVisible(false);
+                      jMenu3.setVisible(true);
+                      jMenu4.setVisible(false);
+                    
+                    break;
+                case "seguridad":
+                     jMenu1.setVisible(false);
+                     jMenu2.setVisible(false);
+                      jMenu3.setVisible(false);
+                       jMenu4.setVisible(true);
+                    break;
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Usuario no autorizado");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordField1ActionPerformed
+
+    private void botonSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSesionActionPerformed
+        // TODO add your handling code here:
+        jPanel2.setVisible(true);
+        botonSesion.setVisible(false);
+        jMenuBar1.setVisible(false);
+    }//GEN-LAST:event_botonSesionActionPerformed
+
+    private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
+        // TODO add your handling code here:
+        File f=new File("");
+        System.out.println(f.getAbsolutePath()+"src\\main\\java\\visor\\visor.html");
+        String cypher="match (p:producto) return p";
+        System.out.println(f.getAbsolutePath()+"\\src\\main\\java\\visor\\visor.html?consulta="+cypher);
+        
+      
+         abrirNavegador(f.getAbsolutePath()+"\\src\\main\\java\\visor\\visor.html");
+         
+            
+           
+       
+    }//GEN-LAST:event_jMenuItem17ActionPerformed
+
+    private void comboRolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboRolActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboRolActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -451,8 +642,14 @@ public class Interfaz extends javax.swing.JFrame {
         }
 
     }
-
+    
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonSesion;
+    private javax.swing.JComboBox<String> comboRol;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -466,6 +663,7 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem16;
+    private javax.swing.JMenuItem jMenuItem17;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
@@ -475,5 +673,7 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPasswordField jPasswordField1;
     // End of variables declaration//GEN-END:variables
 }

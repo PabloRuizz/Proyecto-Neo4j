@@ -332,6 +332,16 @@ CREATE(p)-[r2:PERTENECE{}]->(c)
        
         return lista;
        }
+        public ArrayList<Record> obtenerRoles(){
+        Session sesion = driver.session();
+        ArrayList<Record> lista=new ArrayList<>();
+        Result resultado=sesion.run("MATCH (u:usuario) return u.rol, u.pass");
+        while(resultado.hasNext()){
+            lista.add(resultado.next());
+        }
+       
+        return lista;
+       }
        
        
         

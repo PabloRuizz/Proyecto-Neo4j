@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visor Neo4j</title>
+	<script src="https://cdn.neo4jlabs.com/neovis.js/v1.5.0/neovis.js"></script>
+
+    <!--<script src="neovis.js"></script>-->
+    <script src="dibujo.js"7></script>
+    <style type="text/css">
+        #viz{
+            width: 900px;
+            height: 700px;
+        }    
+    </style>
+</head>
+
+<script>
+var cypher=getQueryVariable('consulta');
+</script>
+
+<body onload="dibujar(cypher);">
+    <div id="viz"></div>
+    
+</body>
+</html>
