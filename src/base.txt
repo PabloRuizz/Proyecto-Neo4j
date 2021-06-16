@@ -1,4 +1,9 @@
 MATCH(r) DETACH DELETE r
+/*Creamos los usuarios*/
+CREATE(u:usuario{rol:"admin", pass:"123"})
+CREATE(u1:usuario{rol:"invitado", pass:"345"})
+CREATE(u2:usuario{rol:"seguridad", pass:"567"})
+/*Defino los productos*/
 CREATE(p:producto{codigo:"P001", descripcion:"Portatil I7-9350 8GB"})
 CREATE(p:producto{codigo:"P002", descripcion:"Portatil Raisen5 16GB"})
 CREATE(p:producto{codigo:"P003", descripcion:"Destornillador profesional con 12 puntas de aluminio"})
@@ -6,17 +11,21 @@ CREATE(p:producto{codigo:"P004", descripcion:"Segadora PowerGround Pro-Cut"})
 CREATE(p:producto{codigo:"P005", descripcion:"Teclado luminoso"})
 CREATE(p:producto{codigo:"P006", descripcion:"Alicate de corte raso"})
 CREATE(p:producto{codigo:"P007", descripcion:"Desbrozadora GL8033 800W"})
+/*Defino las marcas*/
 CREATE(m:marca{nombre:"Bosch"})
 CREATE(m:marca{nombre:"Black and Decker"})
 CREATE(m:marca{nombre:"ASUS"})
 CREATE(m:marca{nombre:"HP"})
 CREATE(m:marca{nombre:"Milwaukee"})
+/*Defino las tiendas*/
 CREATE(t:tienda{nombre:"Ferreteria Paco", email:"ferreteriapaco@gmail.com", TLF:"942345678", localidad:"Santander", direcion:"Calle Castilla 45"})
 CREATE(t:tienda{nombre:"SuperChinChan", email:"chinchansuper@gmail.com", TLF:"942324647", localidad:"Bezana", direcion:"Bezana Lago 34"})
 CREATE(t:tienda{nombre:"Hierros y cosas", email:"hierrosycosas@gmail.com", TLF:"942628452", localidad:"Torrelavega", direcion:"Arcadio González Cantero"})
+/*Defino las categorias*/
 CREATE(c:categoria{nombre:"Ferreteria", descripcion:"herramientas y objetos de carpintería, bricolaje y herrería, como clavos, tornillos, alambre, cerraduras, etc..."})
 CREATE(c:categoria{nombre:"Electronica", descripcion:"Ordenadores, impresoras, copiadoras, teléfonos de todo tipo, de transmisión de sonido, etc..."})
 CREATE(c:categoria{nombre:"Hogar y Jardin", descripcion:"Todos los productos para tu jardín y terraza. Muebles de jardín ... Todo lo que necesita tu casa para lucir perfecta."})
+/*Defino las relacciones productos->marcas*/
 MATCH(p:producto)WHERE p.codigo="P001" MATCH (m:marca)WHERE m.nombre="HP" CREATE(p)-[:ES{}]->(m)
 MATCH(p:producto)WHERE p.codigo="P002" MATCH (m:marca)WHERE m.nombre="ASUS" CREATE(p)-[:ES{}]->(m)
 MATCH(p:producto)WHERE p.codigo="P003" MATCH (m:marca)WHERE m.nombre="Milwaukee" CREATE(p)-[:ES{}]->(m)
@@ -24,18 +33,20 @@ MATCH(p:producto)WHERE p.codigo="P004" MATCH (m:marca)WHERE m.nombre="Black and 
 MATCH(p:producto)WHERE p.codigo="P005" MATCH (m:marca)WHERE m.nombre="HP" CREATE(p)-[:ES{}]->(m)
 MATCH(p:producto)WHERE p.codigo="P006" MATCH (m:marca)WHERE m.nombre="Bosch" CREATE(p)-[:ES{}]->(m)
 MATCH(p:producto)WHERE p.codigo="P007" MATCH (m:marca)WHERE m.nombre="Black and Decker" CREATE(p)-[:ES{}]->(m)
-MATCH(p:producto)WHERE p.codigo="P001" MATCH (t:tienda)WHERE t.nombre="Ferreteria Paco" CREATE(p)-[:DISPONIBLE{precio:850, stock:3}]->(t)
-MATCH(p:producto)WHERE p.codigo="P001" MATCH (t:tienda)WHERE t.nombre="SuperChinChan" CREATE(p)-[:DISPONIBLE{precio:855, stock:4}]->(t)
-MATCH(p:producto)WHERE p.codigo="P002" MATCH (t:tienda)WHERE t.nombre="Ferreteria Paco" CREATE(p)-[:DISPONIBLE{precio:950, stock:1}]->(t)
-MATCH(p:producto)WHERE p.codigo="P002" MATCH (t:tienda)WHERE t.nombre="Hierros y cosas" CREATE(p)-[:DISPONIBLE{precio:850, stock:2}]->(t)
-MATCH(p:producto)WHERE p.codigo="P003" MATCH (t:tienda)WHERE t.nombre="Ferreteria Paco" CREATE(p)-[:DISPONIBLE{precio:550, stock:3}]->(t)
-MATCH(p:producto)WHERE p.codigo="P003" MATCH (t:tienda)WHERE t.nombre="SuperChinChan" CREATE(p)-[:DISPONIBLE{precio:555, stock:4}]->(t)
-MATCH(p:producto)WHERE p.codigo="P003" MATCH (t:tienda)WHERE t.nombre="Hierros y cosas" CREATE(p)-[:DISPONIBLE{precio:652, stock:3}]->(t)
-MATCH(p:producto)WHERE p.codigo="P004" MATCH (t:tienda)WHERE t.nombre="Hierros y cosas" CREATE(p)-[:DISPONIBLE{precio:850, stock:3}]->(t)
-MATCH(p:producto)WHERE p.codigo="P005" MATCH (t:tienda)WHERE t.nombre="SuperChinChan" CREATE(p)-[:DISPONIBLE{precio:356, stock:6}]->(t)
-MATCH(p:producto)WHERE p.codigo="P005" MATCH (t:tienda)WHERE t.nombre="Hierros y cosas" CREATE(p)-[:DISPONIBLE{precio:350, stock:8}]->(t)
-MATCH(p:producto)WHERE p.codigo="P006" MATCH (t:tienda)WHERE t.nombre="SuperChinChan" CREATE(p)-[:DISPONIBLE{precio:555, stock:8}]->(t)
-MATCH(p:producto)WHERE p.codigo="P007" MATCH (t:tienda)WHERE t.nombre="Ferreteria Paco" CREATE(p)-[:DISPONIBLE{precio:250, stock:9}]->(t)
+/*Defino las relaciones productos->tienda y su precio/stock*/
+MATCH(p:producto)WHERE p.codigo="P001" MATCH (t:tienda)WHERE t.nombre="Ferreteria Paco" CREATE(p)-[:DISPONIBLE{precio:120, stock:2}]->(t)
+MATCH(p:producto)WHERE p.codigo="P001" MATCH (t:tienda)WHERE t.nombre="SuperChinChan" CREATE(p)-[:DISPONIBLE{precio:124, stock:5}]->(t)
+MATCH(p:producto)WHERE p.codigo="P002" MATCH (t:tienda)WHERE t.nombre="Ferreteria Paco" CREATE(p)-[:DISPONIBLE{precio:850, stock:5}]->(t)
+MATCH(p:producto)WHERE p.codigo="P002" MATCH (t:tienda)WHERE t.nombre="Hierros y cosas" CREATE(p)-[:DISPONIBLE{precio:855, stock:6}]->(t)
+MATCH(p:producto)WHERE p.codigo="P003" MATCH (t:tienda)WHERE t.nombre="Ferreteria Paco" CREATE(p)-[:DISPONIBLE{precio:435, stock:3}]->(t)
+MATCH(p:producto)WHERE p.codigo="P003" MATCH (t:tienda)WHERE t.nombre="SuperChinChan" CREATE(p)-[:DISPONIBLE{precio:433, stock:1}]->(t)
+MATCH(p:producto)WHERE p.codigo="P003" MATCH (t:tienda)WHERE t.nombre="Hierros y cosas" CREATE(p)-[:DISPONIBLE{precio:430, stock:3}]->(t)
+MATCH(p:producto)WHERE p.codigo="P004" MATCH (t:tienda)WHERE t.nombre="Hierros y cosas" CREATE(p)-[:DISPONIBLE{precio:350, stock:5}]->(t)
+MATCH(p:producto)WHERE p.codigo="P005" MATCH (t:tienda)WHERE t.nombre="SuperChinChan" CREATE(p)-[:DISPONIBLE{precio:234, stock:5}]->(t)
+MATCH(p:producto)WHERE p.codigo="P005" MATCH (t:tienda)WHERE t.nombre="Hierros y cosas" CREATE(p)-[:DISPONIBLE{precio:233, stock:5}]->(t)
+MATCH(p:producto)WHERE p.codigo="P006" MATCH (t:tienda)WHERE t.nombre="SuperChinChan" CREATE(p)-[:DISPONIBLE{precio:546, stock:3}]->(t)
+MATCH(p:producto)WHERE p.codigo="P007" MATCH (t:tienda)WHERE t.nombre="Ferreteria Paco" CREATE(p)-[:DISPONIBLE{precio:325, stock:7}]->(t)
+/*Defino las relaciones productos->categoria*/
 MATCH(p:producto)WHERE p.codigo="P001" MATCH (c:categoria)WHERE c.nombre="Electronica" CREATE(p)-[:PERTENECE{}]->(c)
 MATCH(p:producto)WHERE p.codigo="P002" MATCH (c:categoria)WHERE c.nombre="Electronica" CREATE(p)-[:PERTENECE{}]->(c)
 MATCH(p:producto)WHERE p.codigo="P003" MATCH (c:categoria)WHERE c.nombre="Ferreteria" CREATE(p)-[:PERTENECE{}]->(c)
@@ -43,3 +54,9 @@ MATCH(p:producto)WHERE p.codigo="P004" MATCH (c:categoria)WHERE c.nombre="Hogar 
 MATCH(p:producto)WHERE p.codigo="P005" MATCH (c:categoria)WHERE c.nombre="Electronica" CREATE(p)-[:PERTENECE{}]->(c)
 MATCH(p:producto)WHERE p.codigo="P006" MATCH (c:categoria)WHERE c.nombre="Ferreteria" CREATE(p)-[:PERTENECE{}]->(c)
 MATCH(p:producto)WHERE p.codigo="P007" MATCH (c:categoria)WHERE c.nombre="Hogar y Jardin" CREATE(p)-[:PERTENECE{}]->(c)
+
+
+
+
+
+
